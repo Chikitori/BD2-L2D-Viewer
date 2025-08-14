@@ -413,6 +413,13 @@ export default {
     "cutscene": "cutscene_char000806",
     "dating": ""
   },
+  "000807": {
+    "charName": "Rubia",
+    "costumeName": "Maid Bikini",
+    "spine": "char000807",
+    "cutscene": "",
+    "dating": ""
+  },
   "001001": {
     "charName": "Sylvia",
     "costumeName": "Desert Flower",
@@ -434,6 +441,13 @@ export default {
     "cutscene": "cutscene_char001004",
     "dating": ""
   },
+  "001006": {
+    "charName": "Sylvia",
+    "costumeName": "Bikini Agent",
+    "spine": "char001006",
+    "cutscene": "cutscene_char001006",
+    "dating": "illust_dating8"
+  },
   "001101": {
     "charName": "Teresse",
     "costumeName": "Angel of Destruction",
@@ -454,6 +468,14 @@ export default {
     "spine": "char001107",
     "cutscene": "cutscene_char001107",
     "dating": ""
+  },
+  "001197": {
+    "charName": "Teresse",
+    "costumeName": "Milky Bikini",
+    "spine": "char001197",
+    "cutscene": "cutscene_char001197",
+    "dating": "illust_dating9",
+    "datingHasNoBg": false
   },
   "001201": {
     "charName": "Liatris",

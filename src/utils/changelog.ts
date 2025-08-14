@@ -1,5 +1,16 @@
 export default [
   {
+    "date": "14/08/2025",
+    "changes": [
+      "Added ko-fi page to receive donations.",
+      "Added menu for phone view.",
+      "Added new character icons.",
+      "Added Rubia: Maid Bikini, Sylvia: Bikini Agent and Teresse: Milky Bikini standing animations.",
+      "Added Sylvia: Bikini Agent and Teresse: Milky Bikini ultimate animations.",
+      "Added Sylvia: Bikini Agent and Teresse: Milky Bikini fated guest animations. "
+    ]
+  },
+  {
     "date": "06/08/2025",
     "changes": [
       "Adjusted viewport breakpoints for better experience on tablets and small laptops."
