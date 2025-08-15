@@ -190,8 +190,11 @@ async function load() {
       }
       p.speed = store.animationSpeed
 
-      player.animationState.removeListener(motionListener)
-      player.animationState.addListener(motionListener);
+      if (player && player !== null) {
+        player.animationState?.removeListener(motionListener);
+        player.animationState?.addListener(motionListener);
+      }
+
 
     },
   });

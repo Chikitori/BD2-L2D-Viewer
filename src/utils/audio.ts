@@ -28,7 +28,7 @@ export async function playCharacterMotionAudio() {
     const char = store.characters.find(c => c.id === store.selectedCharacterId)
 
     // get charcter folder
-    const path = `${assetRoot}/${char.id}`
+    const path = `${assetRoot}/${char?.id}`
 
 
     //query to the audio element controlling sounds
@@ -36,7 +36,7 @@ export async function playCharacterMotionAudio() {
     //check if audio element exists and is it currently playing
     if (audioElement && !isAudioElementPlaying(audioElement)) {
       console.log('audioElement', audioElement)
-      audioElement.src = `${path}/char${char.id}_${randomIntNoRepeat(1, 6)}.wav`;
+      audioElement.src = `${path}/char${char?.id}_${randomIntNoRepeat(1, 6)}.wav`;
       console.log('isAudioPlaying', isAudioElementPlaying(audioElement))
 
       // Play it
