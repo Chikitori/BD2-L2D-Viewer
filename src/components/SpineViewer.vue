@@ -4,19 +4,12 @@
     <button
       v-show="store.characters.find(c => c.id === store.selectedCharacterId)?.datingHasNoBg && store.animationCategory === 'dating'"
       @click="store.showDatingBg = !store.showDatingBg"
-      class="absolute z-10 left-2 top-2 hidden lg:block cursor-pointer"
-    >
+      class="absolute z-10 left-2 top-2 hidden lg:block cursor-pointer">
       <BgToggleIcon :active="store.showDatingBg" />
     </button>
-    <input
-      type="range"
-      min="0"
-      max="1"
-      step="0.001"
-      v-model.number="progress"
-      @input="seek"
-      class="seek-range absolute bottom-0 left-0 w-full"
-    />
+    <input type="range" min="0" max="1" step="0.001" v-model.number="progress" @input="seek"
+      class="seek-range absolute bottom-0 left-0 w-full" />
+    <audio id="audio-input"></audio>
   </div>
 </template>
 
@@ -29,11 +22,10 @@ import type { Animation } from '@esotericsoftware/spine-player'
 import type { SpinePlayerInternal } from '@/types/spine-player-internal'
 
 import BgToggleIcon from '@/components/icons/BgToggleIcon.vue'
-
+import { playCharacterMotionAudio } from '@/utils/audio'
 const container = ref<HTMLDivElement | null>(null)
 const progress = ref(0)
 const store = useCharacterStore()
-
 const emit = defineEmits(['animations', 'skins'])
 
 let player: SpinePlayer | null = null
@@ -61,6 +53,7 @@ async function load() {
   }
 
   const assetRoot = import.meta.env.DEV ? 'src/assets/spines' : 'assets/spines'
+
   const path = `${assetRoot}/${char.id}/${ANIMATION_TYPE_BASE_PATH[store.animationCategory]}`
 
   const binaryUrl = char.customFiles?.skel || `${path}.skel`
@@ -68,6 +61,7 @@ async function load() {
   const atlasUrl = char.customFiles?.atlas || `${path}.atlas`
   const rawDataURIs = char.customFiles?.images
 
+  console.log('atlasUrl', atlasUrl)
   offset = new Vector2()
   size = new Vector2()
 
@@ -83,7 +77,9 @@ async function load() {
     const gl = this.context.gl;
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
     originalUpdate.call(this, useMipMaps)
-  }
+
+
+  };
 
   player = new SpinePlayer(container.value, {
     showControls: false,
@@ -179,8 +175,10 @@ async function load() {
       }
       if (store.selectedAnimation) {
         p.setAnimation(store.selectedAnimation, true)
+
         if (store.playing) {
-          p.play()
+          p.play();
+
         } else {
           p.pause()
         }
@@ -191,6 +189,10 @@ async function load() {
         p.skeleton!.updateWorldTransform()
       }
       p.speed = store.animationSpeed
+
+      player.animationState.removeListener(motionListener)
+      player.animationState.addListener(motionListener);
+
     },
   });
   player.speed = store.animationSpeed
@@ -220,6 +222,13 @@ watch(() => store.selectedAnimation, anim => {
   if (player && anim) {
     player.setAnimation(anim, true)
     store.playing = true;
+    console.log('selectedAnimation', store.selectedAnimation)
+
+    if (store.selectedAnimation === 'motion' && store.animationCategory === 'character') {
+      playCharacterMotionAudio();
+
+    }
+
     player.play();
   }
 })
@@ -274,7 +283,7 @@ function seek() {
     entry.nextTrackLast = newTime
     player.animationState!.apply(player.skeleton)
     player.skeleton.updateWorldTransform()
-    ;(player as unknown as SpinePlayerInternal).drawFrame(false)
+      ; (player as unknown as SpinePlayerInternal).drawFrame(false)
   }
 }
 
@@ -411,7 +420,7 @@ function exportAnimation(transparent: boolean): Promise<void> {
         URL.revokeObjectURL(url)
       }
       if (transparent) {
-        ;(p as unknown as SpinePlayerInternal).bg.setFromString(bgColor)
+        ; (p as unknown as SpinePlayerInternal).bg.setFromString(bgColor)
       }
       if (!wasPlaying) p.pause()
       if (!store.useCurrentCamera) {
@@ -447,6 +456,12 @@ function exportAnimation(transparent: boolean): Promise<void> {
     }, recordDuration * 1000)
   })
 }
+const motionListener = {
+  complete: function () {
+    playCharacterMotionAudio();
+  }
+}
+
 
 defineExpose({ resetCamera, saveScreenshot, exportAnimation })
 </script>
@@ -460,6 +475,7 @@ defineExpose({ resetCamera, saveScreenshot, exportAnimation })
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
 }
+
 .seek-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -469,6 +485,7 @@ defineExpose({ resetCamera, saveScreenshot, exportAnimation })
   background: white;
   border: 1px solid #6b7280;
 }
+
 .seek-range::-moz-range-thumb {
   width: 12px;
   height: 12px;

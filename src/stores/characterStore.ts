@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import character_list from '@/utils/character_list'
 
-type AnimationCategory = 'character' | 'ultimate' | 'dating'
+export type AnimationCategory = 'character' | 'ultimate' | 'dating'
 export interface Character {
   id: string
   charName: string
