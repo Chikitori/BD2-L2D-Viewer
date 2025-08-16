@@ -1,7 +1,7 @@
 import { useCharacterStore } from "@/stores/characterStore";
 
 // const audioPath = `${audioAssetRoot}/${char.id}/${ANIMATION_TYPE_BASE_PATH[store.animationCategory]}`
-const assetRoot = '/assets/audios';
+const assetRoot = `${import.meta.env.BASE_URL}assets/audios`;
 
 let lastNumber: number | null = null;
 
