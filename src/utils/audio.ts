@@ -58,7 +58,6 @@ export async function playDatingAudio() {
     const char = store.characters.find(c => c.id === store.selectedCharacterId)
 
     //if the current dating animation is in the ignore file, return and not play any audio
-    console.log('ignore list', AudioIgnoredDatingAnimations[char.id], store.selectedAnimation)
     if (char && AudioIgnoredDatingAnimations[char.id]?.includes(store.selectedAnimation)) {
       console.log('ignored animation', store.selectedAnimation)
       return;
