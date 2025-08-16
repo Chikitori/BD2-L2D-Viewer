@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-s build-main copy-spines copy-audio",
+    "build": "run-s build-main copy-spines copy-audios",
     "build-main": "run-p type-check \"build-only {@}\" --",
     "copy-spines": "node scripts/copy-spines.js",
-    "copy-audio": "node scripts/copy-audio.js",
+    "copy-audios": "node scripts/copy-audios.js",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
