@@ -22,7 +22,7 @@ import type { Animation } from '@esotericsoftware/spine-player'
 import type { SpinePlayerInternal } from '@/types/spine-player-internal'
 
 import BgToggleIcon from '@/components/icons/BgToggleIcon.vue'
-import { playCharacterMotionAudio } from '@/utils/audio'
+import { playAnimationAudio, playCharacterMotionAudio, playDatingAudio } from '@/utils/audio'
 const container = ref<HTMLDivElement | null>(null)
 const progress = ref(0)
 const store = useCharacterStore()
@@ -120,7 +120,7 @@ async function load() {
         }
       }
     },
-    success: (p: SpinePlayer) => {
+    success: async (p: SpinePlayer) => {
       offset = new Vector2()
       size = new Vector2()
       p.skeleton?.setToSetupPose()
@@ -175,7 +175,22 @@ async function load() {
       }
       if (store.selectedAnimation) {
         p.setAnimation(store.selectedAnimation, true)
+        console.log('onSuccess', store.animationCategory)
+        if (player && player !== null) {
 
+          switch (store.animationCategory) {
+            case 'character': {
+              player.animationState?.removeListener(motionListener);
+              player.animationState?.addListener(motionListener);
+
+            } break;
+            case 'dating': {
+              player.animationState?.removeListener(motionListener);
+              player.animationState?.addListener(motionListener);
+            }
+          }
+
+        }
         if (store.playing) {
           p.play();
 
@@ -190,13 +205,12 @@ async function load() {
       }
       p.speed = store.animationSpeed
 
-      if (player && player !== null) {
-        player.animationState?.removeListener(motionListener);
-        player.animationState?.addListener(motionListener);
-      }
+
+
 
 
     },
+
   });
   player.speed = store.animationSpeed
 }
@@ -223,15 +237,11 @@ watch(() => store.selectedAnimation, anim => {
   }
   progress.value = 0
   if (player && anim) {
+    playAnimationAudio();
     player.setAnimation(anim, true)
     store.playing = true;
     console.log('selectedAnimation', store.selectedAnimation)
-
-    playCharacterMotionAudio();
-
-
-
-    player.play();
+    // player.play();
   }
 })
 watch(() => store.selectedSkin, skin => {
@@ -460,7 +470,7 @@ function exportAnimation(transparent: boolean): Promise<void> {
 }
 const motionListener = {
   complete: function () {
-    playCharacterMotionAudio();
+    playAnimationAudio();
   }
 }
 

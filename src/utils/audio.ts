@@ -1,3 +1,4 @@
+import { AudioIgnoredDatingAnimations } from "@/consts/datingScenesConfig";
 import { useCharacterStore } from "@/stores/characterStore";
 
 // const audioPath = `${audioAssetRoot}/${char.id}/${ANIMATION_TYPE_BASE_PATH[store.animationCategory]}`
@@ -49,4 +50,63 @@ export async function playCharacterMotionAudio() {
     }
 
   }
+}
+
+export async function playDatingAudio() {
+  const store = useCharacterStore()
+  if (store.animationCategory === 'dating') {
+    const char = store.characters.find(c => c.id === store.selectedCharacterId)
+
+    //if the current dating animation is in the ignore file, return and not play any audio
+    console.log('ignore list', AudioIgnoredDatingAnimations[char.id], store.selectedAnimation)
+    if (char && AudioIgnoredDatingAnimations[char.id]?.includes(store.selectedAnimation)) {
+      console.log('ignored animation', store.selectedAnimation)
+      return;
+    }
+    // get charcter folder
+    const path = `${assetRoot}/${char?.id}`
+
+
+
+    //query to the audio element controlling sounds
+    const audioElement = document.getElementById('audio-input') as HTMLAudioElement;
+    if (!audioElement) return;
+
+    //check if audio element exists and is it currently playing
+    if (!isAudioElementPlaying(audioElement)) {
+      try {
+        audioElement.src = `${path}/dating/char${char?.id}_${store.selectedAnimation}.wav`;
+        audioElement.onerror = () => {
+          console.warn("❌ Failed to load audio:", `${path}/${store.language ?? "JP"}/char${char?.id}_${store.selectedAnimation}.wav`);
+        };
+        await new Promise<void>((resolve, reject) => {
+          audioElement.oncanplaythrough = () => {
+            audioElement.play()
+              .then(() => resolve()) // resolve after play starts
+              .catch(reject);
+          };
+          audioElement.onerror = () => reject(new Error("Failed to load audio"));
+        });
+      }
+      catch {
+        console.log('Audio assets not found!!!')
+      }
+    }
+  }
+}
+
+export async function playAnimationAudio() {
+  const store = useCharacterStore()
+
+  switch (store.animationCategory) {
+    case 'character': {
+      if (store.selectedAnimation === 'motion') {
+        await playCharacterMotionAudio();
+      }
+    }
+    case 'dating': {
+      await playDatingAudio()
+    }
+  }
+
 }
