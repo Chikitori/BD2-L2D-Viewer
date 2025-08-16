@@ -25,7 +25,6 @@
       <div v-if="!currentChar?.customFiles" class="p-2">
         <span>Voice Language</span>
         <select v-model="store.language" class="bg-gray-700 text-white w-full">
-          <option value="EN">EN</option>
           <option value="JP">JP</option>
           <option value="KR">KR</option>
         </select>

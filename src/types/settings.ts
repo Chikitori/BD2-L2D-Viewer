@@ -1,5 +1,4 @@
-export enum LanguageSetting  {
-  EN = "EN",
+export enum LanguageSetting {
   JP = "JP",
   KR = "KR"
 }
