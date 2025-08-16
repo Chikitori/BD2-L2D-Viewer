@@ -237,7 +237,8 @@ watch(() => store.selectedAnimation, anim => {
   }
   progress.value = 0
   if (player && anim) {
-    playAnimationAudio();
+    if (store.animationCategory === 'character')
+      playAnimationAudio();
     player.setAnimation(anim, true)
     store.playing = true;
     console.log('selectedAnimation', store.selectedAnimation)
