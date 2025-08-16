@@ -1,4 +1,5 @@
 import { useCharacterStore } from '@/stores/characterStore'
+import { LanguageSetting } from '@/types/settings'
 
 export function applyUrlParams(store: ReturnType<typeof useCharacterStore>, search: string): void {
   const params = new URLSearchParams(search)
@@ -24,14 +25,22 @@ export function applyUrlParams(store: ReturnType<typeof useCharacterStore>, sear
   } else {
     store.animationCategory = 'character'
   }
+
+  const language = params.get('lang');
+  if (language) {
+    store.language = language as LanguageSetting;
+  }
   store.playing = true
 }
 
 export function buildUrl(store: ReturnType<typeof useCharacterStore>): string {
   const params = new URLSearchParams()
+
+  console.log('buildURl', params, store);
   if (store.selectedCharacterId) params.set('char', store.selectedCharacterId)
   if (store.selectedAnimation) params.set('anim', store.selectedAnimation)
   if (store.selectedSkin) params.set('skin', store.selectedSkin)
   if (store.animationCategory) params.set('type', store.animationCategory)
+  if (store.language) params.set('lang', store.language)
   return params.toString()
 }

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import character_list from '@/utils/character_list'
+import { LanguageSetting } from '@/types/settings'
 
 export type AnimationCategory = 'character' | 'ultimate' | 'dating'
 export interface Character {
@@ -31,6 +32,7 @@ export const useCharacterStore = defineStore('characterStore', {
     selectedAnimation: '',
     selectedSkin: '',
     animationCategory: 'character' as AnimationCategory,
+    language: 'JP' as LanguageSetting,
     playing: true,
     animationSpeed: 1,
     backgroundColor: '#1f2937',

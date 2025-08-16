@@ -35,12 +35,17 @@ export async function playCharacterMotionAudio() {
     const audioElement = document.getElementById('audio-input') as HTMLAudioElement;
     //check if audio element exists and is it currently playing
     if (audioElement && !isAudioElementPlaying(audioElement)) {
-      console.log('audioElement', audioElement)
-      audioElement.src = `${path}/char${char?.id}_${randomIntNoRepeat(1, 6)}.wav`;
-      console.log('isAudioPlaying', isAudioElementPlaying(audioElement))
+      try {
+        console.log('audioElement', audioElement)
+        audioElement.src = `${path}/${store.language ?? "JP"}/char${char?.id}_${randomIntNoRepeat(1, 6)}.wav`;
+        console.log('isAudioPlaying', isAudioElementPlaying(audioElement))
 
-      // Play it
-      audioElement.oncanplaythrough = function () { audioElement.play() };
+        // Play it
+        audioElement.oncanplaythrough = function () { audioElement.play() };
+      }
+      catch {
+        console.log('Audio assets not found!!!')
+      }
     }
 
   }
