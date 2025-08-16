@@ -227,10 +227,9 @@ watch(() => store.selectedAnimation, anim => {
     store.playing = true;
     console.log('selectedAnimation', store.selectedAnimation)
 
-    if (store.selectedAnimation === 'motion' && store.animationCategory === 'character') {
-      playCharacterMotionAudio();
+    playCharacterMotionAudio();
 
-    }
+
 
     player.play();
   }
